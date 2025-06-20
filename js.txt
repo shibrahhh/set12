@@ -1,0 +1,64 @@
+(js)
+// Order data structure
+let orders = [
+    { id: 1, customer: 'John Doe', status: 'new', items: ['Burger', 'Fries'] },
+    { id: 2, customer: 'Jane Smith', status: 'in-progress', items: ['Pizza', 'Soda'] },
+    { id: 3, customer: 'Michael Brown', status: 'completed', items: ['Pasta', 'Salad'] },
+  ];
+  
+  const orderListElement = document.getElementById('order-list');
+  const totalOrdersElement = document.getElementById('total-orders');
+  const inProgressElement = document.getElementById('in-progress');
+  const completedOrdersElement = document.getElementById('completed-orders');
+  
+  // Function to update order status on the UI
+  function updateOrderList() {
+    orderListElement.innerHTML = '';
+    let inProgressCount = 0;
+    let completedCount = 0;
+  
+    orders.forEach(order => {
+      const orderItem = document.createElement('li');
+      orderItem.classList.add(order.status);
+  
+      orderItem.innerHTML = `
+        <strong>Order #${order.id}</strong><br>
+        Customer: ${order.customer}<br>
+        Items: ${order.items.join(', ')}<br>
+        Status: <span>${capitalizeStatus(order.status)}</span>
+      `;
+  
+      orderListElement.appendChild(orderItem);
+  
+      if (order.status === 'in-progress') inProgressCount++;
+      if (order.status === 'completed') completedCount++;
+    });
+  
+    totalOrdersElement.textContent = orders.length;
+    inProgressElement.textContent = inProgressCount;
+    completedOrdersElement.textContent = completedCount;
+  }
+  
+  // Capitalize the status for display
+  function capitalizeStatus(status) {
+    return status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
+  }
+  
+  // Simulate order status updates every few seconds
+  function simulateOrderStatus() {
+    setInterval(() => {
+      const randomOrder = orders[Math.floor(Math.random() * orders.length)];
+      if (randomOrder.status === 'new') {
+        randomOrder.status = 'in-progress';
+      } else if (randomOrder.status === 'in-progress') {
+        randomOrder.status = 'completed';
+      }
+  
+      updateOrderList();
+    }, 5000); // Update every 5 seconds
+  }
+  
+  // Initialize the dashboard
+  updateOrderList();
+  simulateOrderStatus();
+  
